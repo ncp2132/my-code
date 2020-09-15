@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        
+        <script>
+
+            function howManyChars(x) {
+                return 30 - x;
+            }
+
+            var input_text;
+
+            $(document).ready(function(){
+
+                $("#chars").text(""+howManyChars(0)+"");
+                $("#button").prop("disabled", true);
+
+                $("#textbox").keyup(function(){
+                    var input_length = $(this).val().length;
+                    var characters_remaining = howManyChars(input_length);
+                    $("#chars").text(""+characters_remaining+"");
+
+                    input_text = $(this).val();
+
+                    if(characters_remaining < 0) {
+                        $("#chars").removeClass("positive");
+                        $("#chars").addClass("negative");
+                        $("#button").prop("disabled", true);
+                    }
+                    else {
+                        $("#chars").removeClass("negative");
+                        $("#chars").addClass("positive");
+                        if(!$.trim(input_text).length) {
+                            $("#button").prop("disabled", true);
+                        }
+                        else{
+                            $("#button").prop("disabled", false);
+                        }
+                    }
+                })
+
+                $(document).bind('keypress', function(e) {
+                    var check = $("#button").is(":disabled");
+                    if(!check){
+                        if(e.keyCode==13){
+                            $('#button').trigger('click');
+                        }
+                    }
+                })
+
+                $("#button").click(function(){
+                    $("#post_title").text("POSTS");
+
+                    var username = "ncp2132 ";
+
+                    var new_post = $("<div>");
+                    $(new_post).text(username + input_text);
+                    $("#posts").prepend(new_post);
+                    $(new_post).addClass("newposts");
+
+                    $('#textbox').val('');
+                    $("#chars").text(""+howManyChars(0)+"");
+
+                    $("#textbox").focus();
+                })
+
+            })
+        </script>
+
+        <style>
+            #textbox {
+                width: 175px;
+            }
+            #chars {
+                float: left;
+            }
+            .positive{
+                color: lightgrey;
+            }
+            .negative{
+                color: red;
+                font-weight: bold;
+            }
+            #line {
+                padding-bottom: 30px;
+            }
+            .newposts {
+                border: 1px solid black;
+                width: 260px;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        Write a tweet <br>
+        <input id="textbox"></input><br>
+        <div id="line">
+            <div id="chars" class="positive"></div>
+            <button id="button">Post Tweet</button>
+        </div>
+        <div id="post_title"></div>
+        <div id="posts"></div>
+    </body>
+
+</html>
